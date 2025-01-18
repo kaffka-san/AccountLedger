@@ -20,7 +20,9 @@ extension AccountListViewModel {
         Task { [weak self] in
             guard let self else { return }
             do {
-                let data: AccountResponse = try await apiCommunication.request()
+                let data: AccountResponse = try await apiCommunication.request(
+                    request: AccountsRouter.getAccounts(page: 0, itemsCount: 50)
+                )
                 accounts = data.accounts
                 isLoading = false
                 print("data: \(accounts)")
