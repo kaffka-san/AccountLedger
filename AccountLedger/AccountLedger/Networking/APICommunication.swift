@@ -17,14 +17,12 @@ final class APICommunication {
             guard let httpResponse = response as? HTTPURLResponse,
                   200..<300 ~= httpResponse.statusCode
             else {
-                // TODO: throw Networking Error
-                throw NSError(domain: "Static code error", code: -1)
+                throw NetworkingError.invalidResponse
             }
             
             return try decoder.decode(T.self, from: data)
         } catch {
-            // TODO: throw Networking Error
-            throw NSError(domain: "Networking error", code: -1)
+            throw NetworkingError.map(error)
         }
         
     }

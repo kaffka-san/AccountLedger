@@ -64,8 +64,7 @@ extension AccountsRouter {
 
     func createUrlRequest() throws -> URLRequest {
         guard let urlRequest = urlRequest else {
-            // TODO: throw Networking Error
-            throw NSError(domain: "Invalid URL", code: -1)
+            throw NetworkingError.invalidURL
         }
         return urlRequest
     }
