@@ -13,7 +13,7 @@ final class APICommunication {
     private let apiKey = "ae7c985b-4ee8-421e-ae07-4d8c89731c2c"
     
     func request<T: Decodable>() async throws -> T {
-        guard var url = URL(string: baseURL) else {
+        guard let url = URL(string: baseURL) else {
             // TODO: throw Networking Error
             throw NSError(domain: "Networking error", code: -1)
         }
