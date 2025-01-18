@@ -9,9 +9,9 @@ import Foundation
 import UIKit
 
 final class APICommunication {
-    func request<T: Decodable>(request: AccountsRouter) async throws -> T {
+    func request<T: Decodable>(request: APIConvertible) async throws -> T {
         do {
-            let urlRequest = try request.createUrlRequest()
+            let urlRequest = try request.createURLRequest()
             let (data, response) = try await URLSession.shared.data(for: urlRequest)
             
             guard let httpResponse = response as? HTTPURLResponse,

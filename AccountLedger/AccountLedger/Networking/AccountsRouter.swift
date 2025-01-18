@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum AccountsRouter {
+enum AccountsRouter: APIConvertible {
     case getAccounts(page: Int, itemsCount: Int)
 }
 
@@ -36,33 +36,7 @@ extension AccountsRouter {
         }
     }
     
-    var apiVersion: ApiVersion {
-        ApiVersion.defaultVersion
-    }
-    
-    var baseURLComponents: URLComponents {
-        var components = URLComponents()
-        components.scheme = AccountLedgerAPI().urlScheme
-        components.host = AccountLedgerAPI().urlHost
-        components.path = AccountLedgerAPI().urlPath
-        components.queryItems = parameters
-
-        return components
-    }
-
-    var urlRequest: URLRequest? {
-        guard let url = baseURLComponents.url else { return nil }
-        var request = URLRequest(url: url)
-        request.setValue("application/json", forHTTPHeaderField: "Accept")
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue(APIKey.primary, forHTTPHeaderField: "WEB-API-key")
-        request.setValue(apiVersion.rawValue, forHTTPHeaderField: "api-version")
-        request.url?.appendPathComponent("\(apiVersion.rawValue)/\(path)")
-        request.httpMethod = httpMethod.rawValue
-        return request
-    }
-
-    func createUrlRequest() throws -> URLRequest {
+    func createURLRequest() throws -> URLRequest {
         guard let urlRequest = urlRequest else {
             throw NetworkingError.invalidURL
         }
