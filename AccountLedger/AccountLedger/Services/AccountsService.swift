@@ -12,13 +12,13 @@ protocol AccountsServiceProtocol {
 }
 
 final class AccountsService: AccountsServiceProtocol {
-    private let apiCommunication: APICommunication
+    private let apiManager: APIManager
     
-    init(apiCommunication: APICommunication) {
-        self.apiCommunication = apiCommunication
+    init(apiManager: APIManager) {
+        self.apiManager = apiManager
     }
     
     func getAccounts(page: Int, itemsCount: Int) async throws -> AccountResponse {
-        try await apiCommunication.request(request: AccountsRouter.getAccounts(page: page, itemsCount: itemsCount))
+        try await apiManager.request(request: AccountsRouter.getAccounts(page: page, itemsCount: itemsCount))
     }
 }

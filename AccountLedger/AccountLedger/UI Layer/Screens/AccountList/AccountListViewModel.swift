@@ -8,7 +8,7 @@
 import Foundation
 
 final class AccountListViewModel: ObservableObject {
-    private let accountsService = AccountsService(apiCommunication: APICommunication())
+    private let accountsService = AccountsService(apiManager: APICommunication())
     @Published var accounts: [TransparentAccount] = []
     @Published var isLoading: Bool = false
 }

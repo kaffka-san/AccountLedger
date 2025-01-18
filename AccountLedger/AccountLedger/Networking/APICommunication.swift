@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-final class APICommunication {
+final class APICommunication: APIManager {
     func request<T: Decodable>(request: APIConvertible) async throws -> T {
         do {
             let urlRequest = try request.createURLRequest()
