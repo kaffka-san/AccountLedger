@@ -8,7 +8,7 @@
 import Foundation
 
 final class AccountListViewModel: ObservableObject {
-    private let apiCommunication = APICommunication()
+    private let accountsService = AccountsService(apiCommunication: APICommunication())
     @Published var accounts: [TransparentAccount] = []
     @Published var isLoading: Bool = false
 }
@@ -20,9 +20,7 @@ extension AccountListViewModel {
         Task { [weak self] in
             guard let self else { return }
             do {
-                let data: AccountResponse = try await apiCommunication.request(
-                    request: AccountsRouter.getAccounts(page: 0, itemsCount: 50)
-                )
+                let data = try await accountsService.getAccounts(page: 0, itemsCount: 50)
                 accounts = data.accounts
                 isLoading = false
                 print("data: \(accounts)")
