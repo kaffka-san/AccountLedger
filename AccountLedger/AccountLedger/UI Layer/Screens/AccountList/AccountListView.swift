@@ -29,6 +29,9 @@ extension AccountListView {
             }
             .accentColor(.gray)
             .navigationTitle("Accounts")
+            .navigationDestination(item: $selectedAccountId) { accountId in
+                AccountDetailView(accountNumber: accountId)
+            }
         }
     }
     
@@ -52,7 +55,9 @@ extension AccountListView {
         }
         .padding(.vertical)
         .contentShape(Rectangle())
-        
+        .onTapGesture {
+            selectedAccountId = account.accountNumber
+        }
     }
     
     @ViewBuilder

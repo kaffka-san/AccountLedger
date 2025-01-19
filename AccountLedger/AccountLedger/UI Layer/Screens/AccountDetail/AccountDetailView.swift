@@ -8,12 +8,20 @@
 import SwiftUI
 
 struct AccountDetailView: View {
-    @ObservedObject var viewModel = AccountDetailViewModel()
+    @ObservedObject var viewModel: AccountDetailViewModel
+    
+    init(accountNumber: String) {
+        self.viewModel = AccountDetailViewModel(accountNumber: accountNumber)
+    }
+    
     var body: some View {
         Text("Account Detail")
+            .onAppear {
+                viewModel.fetchTransactions()
+            }
     }
 }
 
 #Preview {
-    AccountDetailView()
+    AccountDetailView(accountNumber: "5555")
 }
