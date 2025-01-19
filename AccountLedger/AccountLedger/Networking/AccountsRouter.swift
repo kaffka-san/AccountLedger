@@ -9,6 +9,7 @@ import Foundation
 
 enum AccountsRouter: APIConvertible {
     case getAccounts(page: Int, itemsCount: Int)
+    case getTransactions(accountNumber: String, page: Int, itemsCount: Int)
 }
 
 extension AccountsRouter {
@@ -16,6 +17,8 @@ extension AccountsRouter {
         switch self {
         case .getAccounts:
             return "transparentAccounts"
+        case .getTransactions(let accountNumber, _, _):
+            return "\(accountNumber)/transactions"
         }
     }
     
@@ -26,12 +29,17 @@ extension AccountsRouter {
                 URLQueryItem(name: "size", value: "\(itemsCount)"),
                 URLQueryItem(name: "page", value: "\(page)")
             ]
+        case let .getTransactions(_, page, itemsCount):
+            return [
+                URLQueryItem(name: "size", value: "\(itemsCount)"),
+                URLQueryItem(name: "page", value: "\(page)")
+            ]
         }
     }
     
     var httpMethod: HTTPMethod {
         switch self {
-        case .getAccounts:
+        case .getAccounts, .getTransactions:
             return .get
         }
     }
