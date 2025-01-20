@@ -20,15 +20,12 @@ final class AccountDetailViewModel: ObservableObject {
 
 // MARK: - Public properties
 extension AccountDetailViewModel {
+    // data for the chart
     var monthlyCashFlow: [(month: String, total: Double)] {
-        Dictionary(grouping: transactions) { transaction in
-            transaction.processingDate.formatAsMonthYear()
-        }
-        .map { (month, transactions) in
-            let total = transactions.reduce(0) { $0 + $1.amount.value }
-            return (month: month, total: total)
-        }
-        .sorted { $0.0 < $1.0 }
+        let transactionsGroupedByMonth = groupTransactionsByMonth()
+        let sortedMonthlyTotals = calculateMonthlyTotals(transactionsGroupedByMonth)
+        
+        return sortedMonthlyTotals.map { (month: $0.month, total: $0.total) }
     }
     
     var maxValueWithBuffer: Double {
@@ -63,4 +60,18 @@ extension AccountDetailViewModel {
 
 // MARK: - Private methods
 extension AccountDetailViewModel {
+    func groupTransactionsByMonth() -> [String: [TransactionDetail]] {
+        Dictionary(grouping: transactions) { transaction in
+            transaction.processingDate.formatAsMonthYear()
+        }
+    }
+    
+    func calculateMonthlyTotals(_ groupedTransactions: [String: [TransactionDetail]]) -> [(month: String, total: Double, firstDate: Date)] {
+        groupedTransactions.map { (month, transactions) in
+            let total = transactions.reduce(0) { $0 + $1.amount.value }
+            let firstDate = transactions.first?.processingDate ?? Date()
+            return (month: month, total: total, firstDate: firstDate)
+        }
+        .sorted { $0.firstDate < $1.firstDate }
+    }
 }
