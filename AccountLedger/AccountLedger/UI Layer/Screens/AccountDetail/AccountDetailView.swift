@@ -8,12 +8,7 @@
 import SwiftUI
 
 struct AccountDetailView: View {
-    @ObservedObject var viewModel: AccountDetailViewModel
-    
-    init(accountNumber: String) {
-        self.viewModel = AccountDetailViewModel(accountNumber: accountNumber)
-    }
-    
+    @StateObject var viewModel: AccountDetailViewModel
     var body: some View {
         Text("Account Detail")
             .onAppear {

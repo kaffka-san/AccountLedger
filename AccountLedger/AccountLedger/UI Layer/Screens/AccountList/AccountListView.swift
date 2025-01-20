@@ -30,7 +30,7 @@ extension AccountListView {
             .accentColor(.gray)
             .navigationTitle("Accounts")
             .navigationDestination(item: $selectedAccountId) { accountId in
-                AccountDetailView(accountNumber: accountId)
+                AccountDetailView(viewModel: AccountDetailViewModel(accountNumber: accountId))
             }
         }
     }
