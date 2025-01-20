@@ -12,25 +12,31 @@ struct AccountListView: View {
     @State private var selectedAccountId: String?
     
     var body: some View {
-        content()
-            .onAppear {
-                viewModel.fetchAccounts()
-            }
+        NavigationStack {
+            content()
+                .navigationTitle("Accounts")
+                .navigationDestination(item: $selectedAccountId) { accountId in
+                    AccountDetailView(viewModel: AccountDetailViewModel(accountNumber: accountId))
+                }
+                .onAppear {
+                    viewModel.fetchAccounts()
+                }
+        }
+        .accentColor(.gray)
     }
 }
 
 extension AccountListView {
     @ViewBuilder
     func content() -> some View {
-        NavigationStack {
-            ZStack {
+        VStack {
+            switch viewModel.viewState {
+            case .loading:
+                ProgressView("Loading Accounts...")
+            case .empty:
+                ContentUnavailableView("No accounts available.", systemImage: "questionmark.app.dashed")
+            case .content:
                 contentList()
-                progressView()
-            }
-            .accentColor(.gray)
-            .navigationTitle("Accounts")
-            .navigationDestination(item: $selectedAccountId) { accountId in
-                AccountDetailView(viewModel: AccountDetailViewModel(accountNumber: accountId))
             }
         }
     }
@@ -78,13 +84,6 @@ extension AccountListView {
     func balance(balance: Double, currency: String?) -> some View {
         Text("\(balance, specifier: "%.2f") \(currency ?? "")")
             .font(.system(size: 14, weight: .black))
-    }
-    
-    @ViewBuilder
-    func progressView() -> some View {
-        if viewModel.isLoading {
-            ProgressView()
-        }
     }
 }
 

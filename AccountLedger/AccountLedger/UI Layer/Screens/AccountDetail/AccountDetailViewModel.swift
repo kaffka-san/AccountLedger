@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class AccountDetailViewModel: ObservableObject {
+final class AccountDetailViewModel: ObservableObject, ViewStateProvider {
     let accountNumber: String
     private let accountsService = AccountsService(apiManager: APICommunication())
     @Published var transactions = [TransactionDetail]()
@@ -36,6 +36,10 @@ extension AccountDetailViewModel {
     var minValueWithBuffer: Double {
         let min = monthlyCashFlow.map { $0.total }.min() ?? 0
         return min - (0.2 * min)
+    }
+    
+    var viewState: ViewState {
+        viewState(for: { transactions.isEmpty })
     }
 }
 

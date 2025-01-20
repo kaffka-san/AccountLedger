@@ -7,10 +7,17 @@
 
 import Foundation
 
-final class AccountListViewModel: ObservableObject {
+final class AccountListViewModel: ObservableObject, ViewStateProvider {
     private let accountsService = AccountsService(apiManager: APICommunication())
     @Published var accounts: [TransparentAccount] = []
     @Published var isLoading: Bool = false
+}
+
+// MARK: - Public properties
+extension AccountListViewModel {
+    var viewState: ViewState {
+        viewState(for: { accounts.isEmpty })
+    }
 }
 
 // MARK: - Public methods

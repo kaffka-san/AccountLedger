@@ -12,7 +12,7 @@ struct AccountDetailView: View {
     @StateObject var viewModel: AccountDetailViewModel
    
     var body: some View {
-        contentList()
+        content()
             .onAppear {
                 viewModel.fetchTransactions()
             }
@@ -20,6 +20,21 @@ struct AccountDetailView: View {
 }
 
 private extension AccountDetailView {
+    @ViewBuilder
+    func content() -> some View {
+        VStack {
+            switch viewModel.viewState {
+            case .loading:
+                ProgressView("Loading Transactions...")
+            case .empty:
+                ContentUnavailableView("No transactions available.", systemImage: "questionmark.app.dashed")
+            case .content:
+                contentList()
+            }
+        }
+        .navigationTitle("Transactions")
+    }
+    
     @ViewBuilder
     func contentList() -> some View {
         VStack(alignment: .leading, spacing: 10) {
