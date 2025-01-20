@@ -18,7 +18,7 @@ extension AccountsRouter {
         case .getAccounts:
             return "transparentAccounts"
         case .getTransactions(let accountNumber, _, _):
-            return "\(accountNumber)/transactions"
+            return "transparentAccounts/\(accountNumber)/transactions"
         }
     }
     
