@@ -12,7 +12,7 @@ struct AccountDetailView: View {
     @StateObject var viewModel: AccountDetailViewModel
    
     var body: some View {
-        content()
+        content
             .onAppear {
                 viewModel.fetchTransactions()
             }
@@ -23,34 +23,34 @@ struct AccountDetailView: View {
 }
 
 private extension AccountDetailView {
-    @ViewBuilder
-    func content() -> some View {
+    var content: some View {
         VStack {
             switch viewModel.viewState {
             case .loading:
                 ProgressView("Loading Transactions...")
             case .empty:
-                ContentUnavailableView("No transactions available.", systemImage: "questionmark.app.dashed")
+                ContentUnavailableView(
+                    "No transactions available.",
+                    systemImage: "questionmark.app.dashed"
+                )
             case .content:
-                contentList()
+                contentList
             }
         }
         .navigationTitle("Transactions")
     }
     
-    @ViewBuilder
-    func contentList() -> some View {
+    var contentList: some View {
         VStack(alignment: .leading, spacing: 10) {
             titleText("Monthly Cash Flow")
-            chartView()
+            chartView
             titleText("Transactions")
-            transactionsList()
+            transactionsList
         }
     }
     
-    @ViewBuilder
-    func transactionsList() -> some View {
-        List(viewModel.transactions.sorted(by: { $0.processingDate < $1.processingDate }), id: \.id) { transaction in
+    var transactionsList: some View {
+        List(viewModel.sortedTransactions, id: \.id) { transaction in
             transactionRow(transaction)
         }
         .listStyle(.plain)
@@ -120,8 +120,7 @@ private extension AccountDetailView {
 
 // MARK: - Chart Section
 private extension AccountDetailView {
-    @ViewBuilder
-    func chartView() -> some View {
+    var chartView: some View {
         Chart(viewModel.monthlyCashFlow, id: \.month) { data in
             BarMark(
                 x: .value("Month", data.month),

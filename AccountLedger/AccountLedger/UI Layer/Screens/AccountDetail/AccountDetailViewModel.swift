@@ -8,8 +8,8 @@
 import Foundation
 
 final class AccountDetailViewModel: ObservableObject, ViewStateProvider {
-    let accountNumber: String
     private let accountsService = AccountsService(apiManager: APICommunication())
+    let accountNumber: String
     @Published var transactions = [TransactionDetail]()
     @Published var isLoading: Bool = false
     @Published var alertConfig: AlertConfiguration?
@@ -42,6 +42,10 @@ extension AccountDetailViewModel {
     var viewState: ViewState {
         viewState(for: { transactions.isEmpty })
     }
+    
+    var sortedTransactions: [TransactionDetail] {
+        transactions.sorted(by: { $0.processingDate < $1.processingDate })
+    }
 }
 
 // MARK: - Public methods
@@ -52,6 +56,8 @@ extension AccountDetailViewModel {
         Task { [weak self] in
             guard let self else { return }
             do {
+                // Sandbox API does not support pagination or items count.
+                // For production, implement initial data load and pagination logic for fetching subsequent pages.
                 let data = try await accountsService.getTransactions(accountNumber: accountNumber, page: 0, itemsCount: 50)
                 transactions = data.transactions
                 isLoading = false

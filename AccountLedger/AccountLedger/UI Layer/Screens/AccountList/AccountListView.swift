@@ -13,7 +13,7 @@ struct AccountListView: View {
     
     var body: some View {
         NavigationStack {
-            content()
+            content
                 .navigationTitle("Accounts")
                 .navigationDestination(item: $selectedAccountId) { accountId in
                     AccountDetailView(viewModel: AccountDetailViewModel(accountNumber: accountId))
@@ -30,8 +30,7 @@ struct AccountListView: View {
 }
 
 extension AccountListView {
-    @ViewBuilder
-    func content() -> some View {
+    var content: some View {
         VStack {
             switch viewModel.viewState {
             case .loading:
@@ -39,13 +38,12 @@ extension AccountListView {
             case .empty:
                 ContentUnavailableView("No accounts available.", systemImage: "questionmark.app.dashed")
             case .content:
-                contentList()
+                contentList
             }
         }
     }
     
-    @ViewBuilder
-    func contentList() -> some View {
+    var contentList: some View {
         List(viewModel.accounts) { account in
             row(for: account)
         }

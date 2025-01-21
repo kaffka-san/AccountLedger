@@ -25,9 +25,12 @@ extension AccountListViewModel {
 extension AccountListViewModel {
     @MainActor
     func fetchAccounts() {
+        isLoading = true
         Task { [weak self] in
             guard let self else { return }
             do {
+                // Sandbox API does not support pagination or items count.
+                // For production, implement initial data load and pagination logic for fetching subsequent pages.
                 let data = try await accountsService.getAccounts(page: 0, itemsCount: 50)
                 accounts = data.accounts
                 isLoading = false
