@@ -12,7 +12,7 @@ struct AccountLedgerAPI: AccountLedgerAPIRepresentable {
     var urlHost: String {
         "webapi.developers.erstegroup.com"
     }
-
+    
     let urlPath = "/api/csas/public/sandbox"
 }
 
