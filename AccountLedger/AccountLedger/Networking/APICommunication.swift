@@ -24,7 +24,6 @@ final class APICommunication: APIManager {
         } catch {
             throw NetworkingError.map(error)
         }
-        
     }
     
     private var decoder: JSONDecoder {

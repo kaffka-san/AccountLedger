@@ -62,7 +62,10 @@ private extension AccountDetailView {
             ForEach(TransactionsConfig.allCases, id: \.self) { rowConfig in
                 switch rowConfig {
                 case .amount:
-                    amountRow(subtitle: rowConfig.texts(for: transaction).label, transaction: transaction)
+                    amountRow(
+                        subtitle: rowConfig.texts(for: transaction).label,
+                        transaction: transaction
+                    )
                 case .processingDate, .type:
                     simpleRow(rowConfig.texts(for: transaction))
                 }

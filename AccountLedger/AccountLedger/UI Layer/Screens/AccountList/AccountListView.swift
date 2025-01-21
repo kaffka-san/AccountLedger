@@ -16,7 +16,9 @@ struct AccountListView: View {
             content
                 .navigationTitle("Accounts")
                 .navigationDestination(item: $selectedAccountId) { accountId in
-                    AccountDetailView(viewModel: AccountDetailViewModel(accountNumber: accountId))
+                    AccountDetailView(
+                        viewModel: AccountDetailViewModel(accountNumber: accountId)
+                    )
                 }
                 .onAppear {
                     viewModel.fetchAccounts()
@@ -36,7 +38,10 @@ extension AccountListView {
             case .loading:
                 ProgressView("Loading Accounts...")
             case .empty:
-                ContentUnavailableView("No accounts available.", systemImage: "questionmark.app.dashed")
+                ContentUnavailableView(
+                    "No accounts available.",
+                    systemImage: "questionmark.app.dashed"
+                )
             case .content:
                 contentList
             }
