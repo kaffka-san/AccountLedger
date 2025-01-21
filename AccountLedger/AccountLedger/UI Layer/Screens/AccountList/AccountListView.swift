@@ -21,6 +21,9 @@ struct AccountListView: View {
                 .onAppear {
                     viewModel.fetchAccounts()
                 }
+                .alert(item: $viewModel.alertConfig) { item in
+                    Alert(title: Text(item.title), message: Text(item.message))
+                }
         }
         .accentColor(.gray)
     }

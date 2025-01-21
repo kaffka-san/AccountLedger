@@ -16,6 +16,9 @@ struct AccountDetailView: View {
             .onAppear {
                 viewModel.fetchTransactions()
             }
+            .alert(item: $viewModel.alertConfig) { item in
+                Alert(title: Text(item.title), message: Text(item.message))
+            }
     }
 }
 

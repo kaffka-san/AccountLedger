@@ -12,6 +12,7 @@ final class AccountDetailViewModel: ObservableObject, ViewStateProvider {
     private let accountsService = AccountsService(apiManager: APICommunication())
     @Published var transactions = [TransactionDetail]()
     @Published var isLoading: Bool = false
+    @Published var alertConfig: AlertConfiguration?
     
     init(accountNumber: String) {
         self.accountNumber = accountNumber
@@ -54,8 +55,8 @@ extension AccountDetailViewModel {
                 let data = try await accountsService.getTransactions(accountNumber: accountNumber, page: 0, itemsCount: 50)
                 transactions = data.transactions
                 isLoading = false
-            } catch {
-                // TODO: show alert
+            } catch let error as NetworkingError {
+                showAlert(for: error)
                 isLoading = false
             }
         }
@@ -77,5 +78,12 @@ extension AccountDetailViewModel {
             return (month: month, total: total, firstDate: firstDate)
         }
         .sorted { $0.firstDate < $1.firstDate }
+    }
+    
+    func showAlert(for error: NetworkingError) {
+        alertConfig = AlertConfiguration(
+            title: error.localizedDescription.title,
+            message: error.localizedDescription.message
+        )
     }
 }
